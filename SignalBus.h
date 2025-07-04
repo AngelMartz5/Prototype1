@@ -1,18 +1,18 @@
 #include "raylib.h"
 #include "Thing.h"
+#include <iostream>
 
 #ifndef SIGNALBUS
 #define SIGNALBUS
 
 class SignalBus{
 public:
-    SignalBus();
-    void AddCollision(Thing &NewThing);
-    void EliminateCollision(Thing EliminateThing);
-    int QuantityCollision();
-    Thing* CollisionArray[0];
-    protected:
-    
+    void AddCollision(Thing* NewThing);
+    void EliminateCollision(Thing* EliminateThing);
+    int ExistsObj(Thing* EliminateThing);
+    int FreeSpace();
+    Thing* CollisionArray[499]{};
+protected:
 
 };
 

@@ -2,14 +2,13 @@
 #include "raymath.h" 
 #include <iostream>
 #include "Window.h"
-#include "SignalBus.h"
 #include <string>
 
-Thing::Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn,string OWNNAME):
+Thing::Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn,string OWNNAME, bool Coll):
     x(PositionSpawn.x),
-    y(PositionSpawn.y)
-    //,MyName(OWNNAME)
-    {
+    y(PositionSpawn.y),
+    MyName(OWNNAME),
+    HasCollsion(Coll){
     MyShape = WhichShapeChose;
     MyColor = WhichColorChose;
     switch (MyShape)
@@ -101,13 +100,10 @@ bool Thing::CanYouMoveThen(){
 
 Vector2 Thing::CollisionBorder(float right__x, float left__x, float button__y, float up__y){
     Window windowScreen;
-    bool Coll = false;
     if (right__x > windowScreen.width){
-        Coll = true;
         x = windowScreen.width-size;
         CollisionDirection.x = 1;
     }else if(left__x < 0){
-        Coll = true;
         switch (MyShape)
         {
         case SP_CIRCLE:
@@ -123,12 +119,10 @@ Vector2 Thing::CollisionBorder(float right__x, float left__x, float button__y, f
     }
 
     if (button__y > windowScreen.height){
-        Coll = true;
         y = windowScreen.height-size;
         CollisionDirection.y = 1;
 
     }else if(up__y < 0){
-        Coll = true;
         switch (MyShape)
         {
         case SP_CIRCLE:
@@ -145,6 +139,10 @@ Vector2 Thing::CollisionBorder(float right__x, float left__x, float button__y, f
     
 
     return CollisionDirection;
+}
+
+Vector2 Thing::Collisions(Thing* ArrayOthers[]){
+
 }
 
 void Thing::BackHandsOfTime(){

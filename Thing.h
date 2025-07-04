@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <string>
+
 using namespace std;
 
 #ifndef THING
@@ -12,12 +13,13 @@ enum Shapes{
 
 class Thing {
 public:
-    Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn, string OWNNAME);
+    Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn, string OWNNAME, bool Coll);
     Vector2 saberLocalizacion();
     Thing* CollisionDectector(Thing* thingsArray[]);
     void Movement(float xMov, float yMov);
     void DelltaProcess();
     Vector2 CollisionBorder(float right__x, float left__x, float button__y, float up__y);
+    Vector2 Collisions(Thing* ArrayOthers[]);
     bool CanYouMoveThen();
     void BackHandsOfTime();
     float x = 0.f;
@@ -30,6 +32,7 @@ public:
     float button_y{y + static_cast<float>(size)};
     bool IsColliding = false;
     string MyName;
+    bool HasCollsion = true;
 private:
 
    

@@ -5,18 +5,36 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
 int main()
 {
     
+    SignalBus SignalRederence{};
     Window windowScreen;
     InitWindow(windowScreen.width, windowScreen.height, "Test GAME");
-    Thing ActualPlayer{SP_RECTANGLE, GREEN, {windowScreen.width/2, windowScreen.height/ 2}, {"Angel"}};
-    Thing OtherBlock{SP_RECTANGLE , RED, {100,0}, {"Pedro"}} ;
-    SignalBus SignalRederence;
+    Thing ActualPlayer{SP_RECTANGLE, GREEN, {windowScreen.width/2, windowScreen.height/ 2}, {"Angel"}, true};
+    Thing OtherBlock{SP_RECTANGLE , RED, {100,0}, {"Pedro"}, true} ;
+    Thing* CollisionPrototype[6]{};
+    CollisionPrototype[1] = &ActualPlayer;
+    CollisionPrototype[4] = &OtherBlock;
+    int numb = 0;
+    for (auto targets: CollisionPrototype)
+    {
+        if(targets != nullptr){
+            if (targets->HasCollsion){
 
-    //cout << "TAMAÑO ARRAY: " << (*SignalRederence.CollisionArray)->size << endl;
+                cout << "NAME:  " << targets->MyName << "  IN:  " << numb << endl;
+            }
+        }
+        numb++;
+    }
+
+    //SignalRederence.AddCollision(ActualPlayer);
+    
+    SignalRederence.AddCollision(&ActualPlayer);
+    SignalRederence.AddCollision(&OtherBlock);
+    
     /*
-    SignalRederence.AddCollision(ActualPlayer);
     SignalRederence.AddCollision(OtherBlock);
     */
     Vector2 PlayerMovement {0,0};
