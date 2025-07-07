@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "Thing.h"
 #include <iostream>
+#include <vector>
 
 #ifndef SIGNALBUS
 #define SIGNALBUS
@@ -10,8 +11,7 @@ public:
     void AddCollision(Thing* NewThing);
     void EliminateCollision(Thing* EliminateThing);
     int ExistsObj(Thing* EliminateThing);
-    int FreeSpace();
-    Thing* CollisionArray[499]{};
+    vector<Thing*>CollisionArray;
 protected:
 
 };

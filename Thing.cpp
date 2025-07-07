@@ -3,6 +3,9 @@
 #include <iostream>
 #include "Window.h"
 #include <string>
+#include "raymath.h"
+
+using namespace std;
 
 Thing::Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn,string OWNNAME, bool Coll):
     x(PositionSpawn.x),
@@ -23,11 +26,6 @@ Vector2 Thing::saberLocalizacion(){
     return Vector2{x,y} ;
 }
 
-Thing* Thing::CollisionDectector(Thing* thingsArray[]){
-    Thing* WhoEntrerd = thingsArray[0];
-    return WhoEntrerd;
-}
-
 void Thing::Movement(float xMov, float yMov){
     
     MovementVector = Vector2{xMov * Velocity,yMov * Velocity};
@@ -38,7 +36,10 @@ void Thing::Movement(float xMov, float yMov){
     }
 }
 
-void Thing::DelltaProcess(){
+void Thing::DelltaProcess(vector<Thing*> ArrayOthers){
+    if(HasCollsion){
+        CollisionsArray = ArrayOthers;
+    }
     
     //std::cout << "LastX: " << lastX << "  X: " << x << std::endl;
     CanYouMoveThen() ? IsColliding = false :IsColliding = true;
@@ -89,14 +90,52 @@ bool Thing::CanYouMoveThen(){
     float Nright_x{ right_x + MovementVector.x };
     float Nup_y{ up_y+ MovementVector.y };
     float Nbutton_y{ button_y+ MovementVector.y };
-    Vector2 Result = CollisionBorder(Nright_x,Nleft_x,Nbutton_y, Nup_y);
+    CollisionBorder(Nright_x,Nleft_x,Nbutton_y, Nup_y);
+    Vector2 ResultColl{0.f,0.f};
+    if (CollisionsArray.size() != 0 ){
+        ResultColl = Collisions(Nright_x,Nleft_x,Nbutton_y, Nup_y );
+    }
+    
     //std::cout << " X:  " << Result.x << "  Y: " << Result.y<< std::endl;
-    if ( Result != Vector2{0,0}){
+    if (ResultColl != Vector2{0,0} ){
         resultM = false;
     }
 
     return resultM;
 }
+
+Vector2 Thing::Collisions(float right__x, float left__x, float button__y, float up__y) {
+    for (Thing* COLL : CollisionsArray) {
+        if (COLL == this) continue;
+
+        float otherLeft   = COLL->left_x;
+        float otherRight  = COLL->right_x;
+        float otherTop    = COLL->up_y;
+        float otherBottom = COLL->button_y;
+
+        bool overlapX = (left__x < otherRight && right__x > otherLeft);
+        bool overlapY = (up__y < otherBottom && button__y > otherTop);
+
+        if (overlapX && overlapY) {
+            float overlapRight  = right_x - otherLeft;
+            float overlapLeft   = otherRight - left_x;
+            float overlapBottom = button_y - otherTop;
+            float overlapTop    = otherBottom - up_y;
+
+            float penX = std::min(overlapRight, overlapLeft);
+            float penY = std::min(overlapBottom, overlapTop);
+
+            if (penX < penY) {
+                CollisionDirection.x = (overlapRight < overlapLeft) ? 1 : -1;
+            } else {
+                CollisionDirection.y = (overlapBottom < overlapTop) ? 1 : -1;
+            }
+        }
+    }
+
+    return CollisionDirection;
+}
+
 
 Vector2 Thing::CollisionBorder(float right__x, float left__x, float button__y, float up__y){
     Window windowScreen;
@@ -141,9 +180,7 @@ Vector2 Thing::CollisionBorder(float right__x, float left__x, float button__y, f
     return CollisionDirection;
 }
 
-Vector2 Thing::Collisions(Thing* ArrayOthers[]){
 
-}
 
 void Thing::BackHandsOfTime(){
     x = lastX;

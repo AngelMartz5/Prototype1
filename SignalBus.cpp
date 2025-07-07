@@ -2,14 +2,12 @@
 #include "SignalBus.h"
 #include "Thing.h"
 #include <iostream>
-
+#include <vector>
 void SignalBus::AddCollision(Thing* NewThing){
-    cout <<"Espacio vacio numero: " << FreeSpace() << endl;
     int Result = ExistsObj(NewThing);
     //cout << "Entro: " << WhoEntere << " And Its result is: " << Result<< endl;
     if (Result == -1){
-        int vacio = FreeSpace();
-        CollisionArray[vacio] = NewThing;
+        CollisionArray.push_back(NewThing);
     }
     
     
@@ -17,19 +15,6 @@ void SignalBus::AddCollision(Thing* NewThing){
 
 void SignalBus::EliminateCollision(Thing* EliminateThing){
     return;
-}
-
-int SignalBus::FreeSpace(){
-    int where = 0;
-    for (auto COll : CollisionArray)
-    {
-        if(COll == nullptr){
-            break;
-        }
-        ++where;
-    }
-    return where;
-    
 }
 
 int SignalBus::ExistsObj(Thing* EliminateThing){

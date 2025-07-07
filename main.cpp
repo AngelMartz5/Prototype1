@@ -12,11 +12,13 @@ int main()
     SignalBus SignalRederence{};
     Window windowScreen;
     InitWindow(windowScreen.width, windowScreen.height, "Test GAME");
-    Thing ActualPlayer{SP_RECTANGLE, GREEN, {windowScreen.width/2, windowScreen.height/ 2}, {"Angel"}, true};
-    Thing OtherBlock{SP_RECTANGLE , RED, {100,0}, {"Pedro"}, true} ;
+    Thing ActualPlayer{SP_CIRCLE, GREEN, {windowScreen.width/2, windowScreen.height/ 2}, {"Angel"}, true};
+    Thing OtherBlock{SP_RECTANGLE , RED, {100,windowScreen.height/ 2}, {"Pedro"}, true} ;
+    Thing OtherBlock2{SP_RECTANGLE , PURPLE, {windowScreen.width/2+200,windowScreen.height/ 2}, {"Roberto"}, true} ;
     Thing* CollisionPrototype[6]{};
     CollisionPrototype[1] = &ActualPlayer;
     CollisionPrototype[4] = &OtherBlock;
+    CollisionPrototype[3] = &OtherBlock2;
     int numb = 0;
     for (auto targets: CollisionPrototype)
     {
@@ -33,12 +35,14 @@ int main()
     
     SignalRederence.AddCollision(&ActualPlayer);
     SignalRederence.AddCollision(&OtherBlock);
-    
+    SignalRederence.AddCollision(&OtherBlock2);
+    //cout << "EL NAME IS : " << SignalRederence.CollisionArray[1]->MyName<< endl;
     /*
     SignalRederence.AddCollision(OtherBlock);
     */
     Vector2 PlayerMovement {0,0};
     int direction = 1;
+    int direction2 = 1;
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -58,8 +62,9 @@ int main()
         */
         ClearBackground(WHITE);
         
-        ActualPlayer.DelltaProcess();
-        OtherBlock.DelltaProcess();
+        ActualPlayer.DelltaProcess(SignalRederence.CollisionArray);
+        OtherBlock.DelltaProcess(SignalRederence.CollisionArray);
+        OtherBlock2.DelltaProcess(SignalRederence.CollisionArray);
         //std::cout << "CollisionBorder: " << OtherBlock.IsColliding <<std::endl;
         
         if(IsKeyDown(KEY_D)){
@@ -89,6 +94,11 @@ int main()
             direction *= -1;
         }
         OtherBlock.Movement(0.f,direction);
+
+        if (OtherBlock2.IsColliding){
+            direction2 *= -1;
+        }
+        OtherBlock2.Movement(direction2,0.f);
         //if(b_axe_y >= u_circle_y && u_axe_y <= b_circle_y && l_axe_x <= r_circle_x && r_axe_x >= l_circle_x){
         
         

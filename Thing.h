@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include <string>
-
+#include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
 
 #ifndef THING
@@ -15,11 +17,10 @@ class Thing {
 public:
     Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn, string OWNNAME, bool Coll);
     Vector2 saberLocalizacion();
-    Thing* CollisionDectector(Thing* thingsArray[]);
     void Movement(float xMov, float yMov);
-    void DelltaProcess();
     Vector2 CollisionBorder(float right__x, float left__x, float button__y, float up__y);
-    Vector2 Collisions(Thing* ArrayOthers[]);
+    void DelltaProcess(vector<Thing*> ArrayOthers);
+    Vector2 Collisions( float right__x, float left__x, float button__y, float up__y);
     bool CanYouMoveThen();
     void BackHandsOfTime();
     float x = 0.f;
@@ -43,11 +44,13 @@ protected:
     Vector2 CollisionDirectionHelper{0.f,0.f};
     float lastX = 0.f;
     float lastY = 0.f;
+    vector<Thing*>CollisionsArray;
     Shapes MyShape;
     Color MyColor;
     int FaceX = 1;
     Vector2 MovementVector {0.f,0.f};
     float Velocity = 10.f;
+    Thing* CopyColls[499];
 };
 
 
