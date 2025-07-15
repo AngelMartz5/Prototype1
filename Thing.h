@@ -13,9 +13,13 @@ enum Shapes{
     SP_RECTANGLE
 };
 
+enum Types{
+    Undifined
+};
+
 class Thing {
 public:
-    Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn, string OWNNAME, bool Coll);
+    Thing(Shapes WhichShapeChose, Color WhichColorChose, Vector2 PositionSpawn, string OWNNAME, bool Coll, bool AreaColl);
     Vector2 saberLocalizacion();
     void Movement(float xMov, float yMov);
     Vector2 CollisionBorder(float right__x, float left__x, float button__y, float up__y);
@@ -34,6 +38,9 @@ public:
     bool IsColliding = false;
     string MyName;
     bool HasCollsion = true;
+    bool DetectionArea = false;
+    Types MyType = Undifined;
+    Color MyColor;
 private:
 
    
@@ -42,15 +49,19 @@ protected:
     Vector2 NextVector{0.f,0.f};
     Vector2 CollisionDirection{0.f,0.f};
     Vector2 CollisionDirectionHelper{0.f,0.f};
+    bool EnteredArea = false;
     float lastX = 0.f;
     float lastY = 0.f;
     vector<Thing*>CollisionsArray;
+    Thing* AreaCollision{};
     Shapes MyShape;
-    Color MyColor;
     int FaceX = 1;
     Vector2 MovementVector {0.f,0.f};
     float Velocity = 10.f;
     Thing* CopyColls[499];
+    bool NextArea = true;
+    Thing* ArrayColls(Thing* AreaEntered, bool AddArea);
+    vector<Thing*>AreaArray;
 };
 
 
